@@ -1,7 +1,7 @@
 # data_storage.py
 import pandas as pd
 
-file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/climatechange.csv"
+file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/biendoikhihau.csv"
 
 # Hàm đọc dữ liệu từ file
 def read_data():
@@ -117,4 +117,5 @@ def crud_menu():
             break
         else:
             print("Lựa chọn không hợp lệ. Vui lòng thử lại.")
-crud_menu()
+if __name__ == "__main__":
+    crud_menu()
