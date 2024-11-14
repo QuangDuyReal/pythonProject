@@ -9,6 +9,40 @@ def read_data():
     print("Dữ liệu đã được tải lên")
     return data
 
+# Hàm phân trang
+def paginate_data(data, rows_per_page=60):
+    pd.set_option('display.max_columns', None)  # Hiển thị tất cả các cột
+    pd.set_option('display.width', 1000)  # Đặt chiều rộng cho dễ đọc
+    
+    total_rows = len(data)
+    total_pages = (total_rows + rows_per_page - 1) // rows_per_page  # Tính tổng số trang
+    
+    print(f"Tổng số trang: {total_pages}")
+    
+    while True:
+        try:
+            page_number = int(input(f"Nhập số trang (1 - {total_pages}) hoặc 0 để thoát: "))
+            if page_number == 0:
+                print("Đã thoát khỏi phân trang.")
+                break
+            elif 1 <= page_number <= total_pages:
+                # Tính chỉ số hàng đầu và hàng cuối của trang
+                start_row = (page_number - 1) * rows_per_page
+                end_row = min(start_row + rows_per_page, total_rows)
+                
+                # Hiển thị dữ liệu của trang
+                print(f"\nTrang {page_number} (dòng {start_row + 1} đến {end_row}):")
+                print(data.iloc[start_row:end_row])
+            else:
+                print(f"Vui lòng nhập số trang trong khoảng từ 1 đến {total_pages}.")
+        except ValueError:
+            print("Vui lòng nhập một số nguyên hợp lệ.")
+    
+    # Khôi phục cài đặt mặc định của Pandas
+    pd.reset_option('display.max_columns')
+    pd.reset_option('display.width')
+
+
 # Hàm lưu dữ liệu trở lại file
 def save_data(data):
     data.to_csv(file_path, index=False)
@@ -41,7 +75,16 @@ def create_record(dCode, Domain, AreaCode, Area, eCode, Element, monthsCode, Mon
 # Hiển thị tất cả các bản ghi
 def read_all_record():
     data = read_data()
-    print(data)
+
+    # Hỏi người dùng chọn các cột muốn xem
+    print("Các cột có sẵn:", list(data.columns))
+    # Lọc cột nếu cần
+    selected_columns = input("Nhập tên các cột muốn hiển thị, cách nhau bởi dấu phẩy (hoặc để trống để hiển thị tất cả): ")
+    selected_columns = [col.strip() for col in selected_columns.split(",") if col.strip()] or list(data.columns)
+    data = data[selected_columns]
+    
+    # Gọi hàm phân trang với số dòng mỗi trang là 60
+    paginate_data(data, rows_per_page=60)
 
 def update_record(record_id, column_name, new_value):
     # Đọc dữ liệu từ file CSV
