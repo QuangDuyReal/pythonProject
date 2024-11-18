@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from storage.data_storage import read_data
 from sklearn.linear_model import LinearRegression
-from cleaning.data_cleaning import handle_missing_values
 
 def plot_all_countries_temperature_change(data, title, xlabel, ylabel):
     plt.figure(figsize=(14, 8))

@@ -1,4 +1,4 @@
-# data_storage.py
+from cleaning.data_cleaning import handle_missing_values, normalize_text, convert_data_types
 import pandas as pd
 
 file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/biendoikhihau.csv"
@@ -6,6 +6,7 @@ file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/biendoikhihau.cs
 # Hàm đọc dữ liệu từ file
 def read_data():
     data = pd.read_csv(file_path, low_memory = False)
+    data = handle_missing_values(data, fill_value=0)
     print("Dữ liệu đã được tải lên")
     return data
 

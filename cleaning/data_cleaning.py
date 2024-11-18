@@ -1,6 +1,6 @@
 import pandas as pd
 
-def handle_missing_values(data, fill_value=-1, column_fill_values=None):
+def handle_missing_values(data, fill_value=0, column_fill_values=None):
     """
     Xử lý giá trị bị thiếu trong dữ liệu bằng cách điền giá trị thay thế.
 

@@ -1,17 +1,4 @@
-import pandas as pd
 from storage.data_storage import read_data
-
-# Hàm sắp xếp dữ liệu
-def sort_data():
-    data = read_data()
-    column = input("Nhập tên cột muốn sắp xếp: ")
-    ascending = input("Sắp xếp tăng dần? (y/n): ").strip().lower() == 'y'
-
-    if column in data.columns:
-        sorted_data = data.sort_values(by=column, ascending=ascending)
-        print(sorted_data)
-    else:
-        print("Tên cột không hợp lệ. Vui lòng kiểm tra lại.")
 
 # Hàm tìm kiếm dữ liệu
 def search_data(area_name, page_size=60):
@@ -51,18 +38,3 @@ def search_data(area_name, page_size=60):
         except ValueError:
             print("Vui lòng nhập số hợp lệ.")
         
-
-
-# Hàm trích lọc dữ liệu theo khoảng thời gian
-def filter_data():
-    data = read_data()
-    start_year = input("Nhập năm bắt đầu (hoặc để trống để không giới hạn): ")
-    end_year = input("Nhập năm kết thúc (hoặc để trống để không giới hạn): ")
-
-    if start_year.isdigit():
-        data = data[data['Year'] >= int(start_year)]
-    if end_year.isdigit():
-        data = data[data['Year'] <= int(end_year)]
-
-    print(f"Dữ liệu sau khi lọc từ năm {start_year} đến {end_year}:")
-    print(data)
