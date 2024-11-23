@@ -2,22 +2,32 @@ from storage.data_storage import read_data
 
 # Hàm tìm kiếm dữ liệu
 def search_data(area_name, page_size=60):
-    data = read_data()
+    """
+    Tìm kiếm dữ liệu dựa trên tên quốc gia hoặc khu vực và hiển thị kết quả theo từng trang.
 
-    # Lọc dữ liệu theo `Area` và chọn các cột cần hiển thị
+    Args:
+        area_name (str): Tên quốc gia hoặc khu vực cần tìm kiếm.
+        page_size (int, optional): Số lượng kết quả hiển thị trên mỗi trang. 
+                                   Mặc định là 60.
+
+    Returns:
+        None: Kết quả tìm kiếm được hiển thị trực tiếp ra màn hình.
+
+    Chức năng:
+        - Lọc dữ liệu theo tên quốc gia hoặc khu vực (không phân biệt chữ hoa/thường).
+        - Tính toán số trang cần thiết để hiển thị kết quả.
+        - Hỗ trợ người dùng điều hướng giữa các trang hoặc thoát tìm kiếm.
+    """
+    data = read_data()
     result = data[data['Area'].str.contains(area_name, case=False, na=False)][['Area', 'Months', 'Year', 'Value']]
 
     if result.empty:
         print(f"Không tìm thấy kết quả cho quốc gia '{area_name}'")
         return
-
-    # Tính toán số trang cần thiết
     total_records = len(result)
     total_pages = (total_records + page_size - 1) // page_size
 
     print(f"Đã tìm thấy {total_records} kết quả cho quốc gia '{area_name}'. Có {total_pages} trang.")
-
-    # Chọn trang để xem
     while True:
         try:
             page_num = int(input(f"Nhập số trang (1-{total_pages}, hoặc 0 để thoát): "))

@@ -1,9 +1,22 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from storage.data_storage import read_data
+#Thư viênj dùng để phân tích dữ liệu
 from sklearn.linear_model import LinearRegression
 
 def plot_all_countries_temperature_change(data, title, xlabel, ylabel):
+    """
+    Vẽ biểu đồ thay đổi nhiệt độ theo thời gian cho tất cả các quốc gia.
+
+    Args:
+        data (DataFrame): Dữ liệu nguồn chứa thông tin nhiệt độ.
+        title (str): Tiêu đề của biểu đồ.
+        xlabel (str): Nhãn trục X.
+        ylabel (str): Nhãn trục Y.
+
+    Returns:
+        None
+    """
     plt.figure(figsize=(14, 8))
 
     # Lọc dữ liệu chỉ cho "Temperature change"
@@ -49,6 +62,17 @@ def predict_temperature_trend(data):
     plt.grid(True)  # Thêm lưới cho biểu đồ dự đoán
 
 def predict_temperature_trend(data, country_name=None):
+    """
+    Dự đoán xu hướng thay đổi nhiệt độ dựa trên hồi quy tuyến tính.
+
+    Args:
+        data (DataFrame): Dữ liệu nguồn chứa thông tin nhiệt độ.
+        country_name (str, optional): Tên quốc gia (nếu cần dự đoán cho một quốc gia cụ thể). 
+                                      Mặc định là None, sẽ dự đoán cho trung bình toàn cầu.
+
+    Returns:
+        None
+    """
     if country_name:
         data = data[(data['Area'].str.lower() == country_name.lower()) & (data['Element'] == 'Temperature change')]
         if data.empty:
@@ -85,6 +109,15 @@ def predict_temperature_trend(data, country_name=None):
     plt.show()
 
 def plot_option():
+    """
+    Hiển thị menu tùy chọn để người dùng chọn vẽ biểu đồ thay đổi nhiệt độ theo thời gian.
+
+    Nếu không chọn quốc gia, sẽ vẽ cho tất cả quốc gia. Nếu chọn quốc gia, 
+    sẽ vẽ biểu đồ thay đổi nhiệt độ và dự đoán xu hướng cho quốc gia đó.
+
+    Returns:
+        None
+    """
     data = read_data()
     
     country = input("Nhập tên quốc gia để vẽ biểu đồ thay đổi nhiệt độ (hoặc nhấn Enter để vẽ cho tất cả quốc gia): ").strip()

@@ -5,11 +5,13 @@ from storage.data_storage import(
     delete_record)
 from visualization.data_visualization import plot_option
 from processing.data_processing import search_data
-
+#Thư viện để làm đẹp giao diện console
+from rich.console import Console
 
 def main_menu():
+    console = Console()
     while True:
-        print("\n--- Chương trình Theo dõi Biến đổi Khí hậu ---")
+        console.print("\n[bold magenta]--- Chương trình Theo dõi Biến đổi Khí hậu ---[/bold magenta]")
         print("1. Thêm bản ghi mới")
         print("2. Hiển thị tất cả bản ghi")
         print("3. Cập nhật bản ghi")
