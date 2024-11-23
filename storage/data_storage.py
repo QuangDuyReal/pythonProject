@@ -1,4 +1,4 @@
-# data_storage.py
+from cleaning.data_cleaning import handle_missing_values
 import pandas as pd
 
 file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/biendoikhihau.csv"
@@ -6,43 +6,9 @@ file_path = "D:/UTE/Nhập môn lập trình Python/Myself/data/biendoikhihau.cs
 # Hàm đọc dữ liệu từ file
 def read_data():
     data = pd.read_csv(file_path, low_memory = False)
+    data = handle_missing_values(data, fill_value=0) #làm sạch dữ liệu
     print("Dữ liệu đã được tải lên")
     return data
-
-# Hàm phân trang
-def paginate_data(data, rows_per_page=60):
-    pd.set_option('display.max_columns', None)  # Hiển thị tất cả các cột
-    pd.set_option('display.width', 1000)  # Đặt chiều rộng cho dễ đọc
-    
-    total_rows = len(data)
-    total_pages = (total_rows + rows_per_page - 1) // rows_per_page  # Tính tổng số trang
-    
-    print(f"Tổng số trang: {total_pages}")
-    
-    while True:
-        try:
-            page_number = int(input(f"Nhập số trang (1 - {total_pages}) hoặc 0 để thoát: "))
-            if page_number == 0:
-                print("Đã thoát khỏi phân trang.")
-                break
-            elif 1 <= page_number <= total_pages:
-                # Tính chỉ số hàng đầu và hàng cuối của trang
-                start_row = (page_number - 1) * rows_per_page
-                end_row = min(start_row + rows_per_page, total_rows)
-                
-                # Hiển thị dữ liệu của trang
-                print(f"\nTrang {page_number} (dòng {start_row + 1} đến {end_row}):")
-                print(data.iloc[start_row:end_row])
-            else:
-                print(f"Vui lòng nhập số trang trong khoảng từ 1 đến {total_pages}.")
-        except ValueError:
-            print("Vui lòng nhập một số nguyên hợp lệ.")
-    
-    # Khôi phục cài đặt mặc định của Pandas
-    pd.reset_option('display.max_columns')
-    pd.reset_option('display.width')
-
-
 # Hàm lưu dữ liệu trở lại file
 def save_data(data):
     data.to_csv(file_path, index=False)
@@ -50,6 +16,28 @@ def save_data(data):
 
 # Thêm bản ghi mới
 def create_record(dCode, Domain, AreaCode, Area, eCode, Element, monthsCode, Months, yearsCode, Year, Unit, Value, Flag, FlagDes):
+    """
+    Thêm một bản ghi mới vào tệp dữ liệu CSV.
+
+    Args:
+        dCode (str): Mã miền.
+        Domain (str): Tên miền.
+        AreaCode (str): Mã khu vực (M49).
+        Area (str): Tên khu vực/quốc gia.
+        eCode (str): Mã yếu tố.
+        Element (str): Yếu tố (ví dụ: thay đổi nhiệt độ).
+        monthsCode (str): Mã tháng.
+        Months (str): Tên tháng.
+        yearsCode (str): Mã năm.
+        Year (str): Năm.
+        Unit (str): Đơn vị đo lường.
+        Value (float): Giá trị đo lường.
+        Flag (str): Cờ trạng thái.
+        FlagDes (str): Mô tả cờ trạng thái.
+
+    Returns:
+        None
+    """
     data = read_data()
     new_record = {
         'Domain Code': dCode,
@@ -74,8 +62,15 @@ def create_record(dCode, Domain, AreaCode, Area, eCode, Element, monthsCode, Mon
 
 # Hiển thị tất cả các bản ghi
 def read_all_record():
-    data = read_data()
+    """
+    Đọc và hiển thị tất cả các bản ghi trong tệp CSV.
 
+    Yêu cầu người dùng chọn cột hiển thị và thực hiện phân trang dữ liệu.
+
+    Returns:
+        None
+    """
+    data = read_data()
     # Hỏi người dùng chọn các cột muốn xem
     print("Các cột có sẵn:", list(data.columns))
     # Lọc cột nếu cần
@@ -86,7 +81,65 @@ def read_all_record():
     # Gọi hàm phân trang với số dòng mỗi trang là 60
     paginate_data(data, rows_per_page=60)
 
+# Hàm phân trang
+def paginate_data(data, rows_per_page=60):
+    """
+    Thực hiện phân trang dữ liệu, hiển thị một số lượng hàng nhất định trên mỗi trang.
+
+    Args:
+        data (DataFrame): Dữ liệu cần phân trang.
+        rows_per_page (int, optional): Số lượng hàng hiển thị trên mỗi trang. 
+                                       Mặc định là 60.
+
+    Returns:
+        None: Kết quả được in trực tiếp ra màn hình theo từng trang.
+    
+    Lưu ý:
+        Người dùng có thể nhập số trang để điều hướng qua các trang hoặc nhập 0 để thoát.
+    """
+    pd.set_option('display.max_columns', None)  # Hiển thị tất cả các cột
+    pd.set_option('display.width', 1000)  # Đặt chiều rộng cho dễ đọc
+    
+    total_rows = len(data)
+    total_pages = (total_rows + rows_per_page - 1) // rows_per_page  # Tính tổng số trang
+    
+    print(f"Tổng số trang: {total_pages}")
+    
+    while True:
+        try:
+            page_number = int(input(f"Nhập số trang (1 - {total_pages}) hoặc 0 để thoát: "))
+            if page_number == 0:
+                print("Đã thoát khỏi phân trang.")
+                break
+            elif 1 <= page_number <= total_pages:
+                # Tính chỉ số hàng đầu và hàng cuối của trang
+                start_row = (page_number - 1) * rows_per_page + 1
+                end_row = min(start_row + rows_per_page, total_rows)
+                
+                # Hiển thị dữ liệu của trang
+                print(f"\nTrang {page_number} (dòng {start_row} đến {end_row - 1}):")
+                print(data.iloc[start_row:end_row])
+            else:
+                print(f"Vui lòng nhập số trang trong khoảng từ 1 đến {total_pages}.")
+        except ValueError:
+            print("Vui lòng nhập một số nguyên hợp lệ.")
+    
+    # Khôi phục cài đặt mặc định của Pandas
+    pd.reset_option('display.max_columns')
+    pd.reset_option('display.width')
+
 def update_record(record_id, column_name, new_value):
+    """
+    Cập nhật một giá trị trong tệp CSV dựa trên chỉ số bản ghi và tên cột.
+
+    Args:
+        record_id (int): Chỉ số của bản ghi cần cập nhật.
+        column_name (str): Tên cột cần cập nhật.
+        new_value (str): Giá trị mới để thay thế.
+
+    Returns:
+        None
+    """
     # Đọc dữ liệu từ file CSV
     data = read_data()
     
@@ -110,55 +163,3 @@ def delete_record(record_id):
         print(f"Đã xóa bản ghi {record_id}")
     else:
         print("Bản ghi không tồn tại")
-
-# Menu CRUD
-def crud_menu():
-    while True:
-        print("\n--- Menu CRUD ---")
-        print("1. Thêm bản ghi mới")
-        print("2. Hiển thị tất cả bản ghi")
-        print("3. Cập nhật bản ghi")
-        print("4. Xóa bản ghi")
-        print("5. Thoát")
-
-        choice = input("Nhập lựa chọn của bạn (1-5): ")
-        
-        if choice == '1':
-            # Gọi hàm `create_record()` và nhập các giá trị cần thiết
-            # Ví dụ:
-            dCode = input("Nhập Domain Code: ")
-            Domain = input("Nhập Domain: ")
-            AreaCode = input("Nhập Area Code: ")
-            Area = input("Nhập Area: ")
-            eCode = input("Nhập Element Code: ")
-            Element = input("Nhập Element: ")
-            monthsCode = input("Nhập Months Code: ")
-            Months = input("Nhập Months: ")
-            yearsCode = input("Nhập Year Code: ")
-            Year = input("Nhập Year: ")
-            Unit = input("Nhập Unit: ")
-            Value = input("Nhập Value: ")
-            Flag = input("Nhập Flag: ")
-            FlagDes = input("Nhập FlagDes: ")
-            create_record(dCode, Domain, AreaCode, Area, eCode, Element, monthsCode, Months, yearsCode, Year, Unit, Value, Flag, FlagDes)
-        
-        elif choice == '2':
-            read_all_record()
-        
-        elif choice == '3':
-            record_id = int(input("Nhập ID bản ghi cần cập nhật: "))
-            column = input("Nhập tên cột cần cập nhật: ")
-            new_value = input("Nhập giá trị mới: ")
-            update_record(record_id, column, new_value)
-        
-        elif choice == '4':
-            record_id = int(input("Nhập ID bản ghi cần xóa: "))
-            delete_record(record_id)
-        
-        elif choice == '5':
-            print("Đã thoát chương trình.")
-            break
-        else:
-            print("Lựa chọn không hợp lệ. Vui lòng thử lại.")
-if __name__ == "__main__":
-    crud_menu()
