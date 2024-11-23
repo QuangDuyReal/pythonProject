@@ -5,7 +5,6 @@ from .data_storage import (
     read_all_record,
     update_record,
     delete_record,
-    crud_menu
 )
 
 __all__ = [
@@ -15,5 +14,4 @@ __all__ = [
     "read_all_record",
     "update_record",
     "delete_record",
-    "crud_menu"
 ]

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from storage.data_storage import read_data
-#Thư viênj dùng để phân tích dữ liệu
+#Thư viện dùng để phân tích dữ liệu
 from sklearn.linear_model import LinearRegression
 
 def plot_all_countries_temperature_change(data, title, xlabel, ylabel):

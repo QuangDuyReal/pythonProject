@@ -113,11 +113,11 @@ def paginate_data(data, rows_per_page=60):
                 break
             elif 1 <= page_number <= total_pages:
                 # Tính chỉ số hàng đầu và hàng cuối của trang
-                start_row = (page_number - 1) * rows_per_page
+                start_row = (page_number - 1) * rows_per_page + 1
                 end_row = min(start_row + rows_per_page, total_rows)
                 
                 # Hiển thị dữ liệu của trang
-                print(f"\nTrang {page_number} (dòng {start_row + 1} đến {end_row}):")
+                print(f"\nTrang {page_number} (dòng {start_row} đến {end_row - 1}):")
                 print(data.iloc[start_row:end_row])
             else:
                 print(f"Vui lòng nhập số trang trong khoảng từ 1 đến {total_pages}.")
@@ -163,55 +163,3 @@ def delete_record(record_id):
         print(f"Đã xóa bản ghi {record_id}")
     else:
         print("Bản ghi không tồn tại")
-
-# Menu CRUD
-def crud_menu():
-    while True:
-        print("\n--- Menu CRUD ---")
-        print("1. Thêm bản ghi mới")
-        print("2. Hiển thị tất cả bản ghi")
-        print("3. Cập nhật bản ghi")
-        print("4. Xóa bản ghi")
-        print("5. Thoát")
-
-        choice = input("Nhập lựa chọn của bạn (1-5): ")
-        
-        if choice == '1':
-            # Gọi hàm `create_record()` và nhập các giá trị cần thiết
-            # Ví dụ:
-            dCode = input("Nhập Domain Code: ")
-            Domain = input("Nhập Domain: ")
-            AreaCode = input("Nhập Area Code: ")
-            Area = input("Nhập Area: ")
-            eCode = input("Nhập Element Code: ")
-            Element = input("Nhập Element: ")
-            monthsCode = input("Nhập Months Code: ")
-            Months = input("Nhập Months: ")
-            yearsCode = input("Nhập Year Code: ")
-            Year = input("Nhập Year: ")
-            Unit = input("Nhập Unit: ")
-            Value = input("Nhập Value: ")
-            Flag = input("Nhập Flag: ")
-            FlagDes = input("Nhập FlagDes: ")
-            create_record(dCode, Domain, AreaCode, Area, eCode, Element, monthsCode, Months, yearsCode, Year, Unit, Value, Flag, FlagDes)
-        
-        elif choice == '2':
-            read_all_record()
-        
-        elif choice == '3':
-            record_id = int(input("Nhập ID bản ghi cần cập nhật: "))
-            column = input("Nhập tên cột cần cập nhật: ")
-            new_value = input("Nhập giá trị mới: ")
-            update_record(record_id, column, new_value)
-        
-        elif choice == '4':
-            record_id = int(input("Nhập ID bản ghi cần xóa: "))
-            delete_record(record_id)
-        
-        elif choice == '5':
-            print("Đã thoát chương trình.")
-            break
-        else:
-            print("Lựa chọn không hợp lệ. Vui lòng thử lại.")
-if __name__ == "__main__":
-    crud_menu()
